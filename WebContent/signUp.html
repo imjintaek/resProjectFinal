@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>맛집보여주는오빠들</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width" initial-scale ="1">
+<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+<script language="javascript">
+   
+   function validate(command) {
+      var re = /^[a-zA-Z0-9]{4,12}$/ // 아이디와 패스워드가 적합한지 검사할 정규식
+      var re2 = /^[0-9a-zA-Z]([-_]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;// 이메일이 적합한지 검사할 정규식
+
+      var id = document.getElementById("userId");
+      var pw = document.getElementById("userPass");
+      var email = document.getElementById("userEmail");
+      var name = document.getElementById("userName");
+      // ------------ 이메일 까지 -----------
+      
+      if(command == 1){
+         if (!check(re, id, "아이디는 4~12자의 영문 대소문자와 숫자로만 입력")) {
+            return false;
+         }
+   
+         if (!check(re, pw, "패스워드는 4~12자의 영문 대소문자와 숫자로만 입력")) {
+            return false;
+         }
+         if (signFrom.userPass.value != signFrom.checkpw.value) {
+            alert("비밀번호가 다릅니다. 다시 확인해 주세요.");
+            signFrom.checkpw.value = "";
+            signFrom.checkpw.focus();
+            return false;
+         }
+         if (signFrom.userId.value == "") {
+            alert("이름을 입력해 주세요");
+            signFrom.userId.focus();
+            return false;
+         }
+         if (signFrom.userEmail.value == "") {
+            alert("이메일을 입력해 주세요");
+            signFrom.userEmail.focus();
+            return false;
+         }
+         if (!check(re2, userEmail, "적합하지 않은 이메일 형식입니다.")) {
+            return false;
+         }
+         
+         if (signFrom.checkID.value == "false"){
+            alert("아이디 중복검사를 실시해주세요!!");
+            return false;
+         }
+      }else if(command == 2){
+    	 if(re.test(document.getElementById("userId").value)){
+    		 var xhttp = new XMLHttpRequest();
+             xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                   var result = this.responseText;
+                   if(result == "false"){
+                      alert("사용 가능한 아이디입니다!");
+                      signFrom.checkID.value = "true";
+                   }else{
+                      alert("아이디가 존재합니다! 다른 아이디로 입력해주세요");
+                      signFrom.checkID.value = "false";
+                   }
+                }
+             };
+             xhttp.open("GET", "con?command=idCheck&userId="+document.getElementById("userId").value, true);
+             xhttp.send();
+    	 }
+    	 alert("아이디는 4~12자의 영문 대소문자와 숫자로만 입력");
+    	 document.getElementById("userId").value = "";
+    	 document.getElementById("userId").value.focus();
+      }
+   }
+
+   function check(re, what, message) {
+      if (re.test(what.value)) {
+         return true;
+      }
+      alert(message);
+      what.value = "";
+      what.focus();
+   }
+   
+   function checkUserId(v){
+      if(v != 1){
+         var checkid = v;
+      }else{
+         return
+      }
+   }
+   
+</script>
+<style>
+@import url(//fonts.googleapis.com/earlyaccess/notosanskannada.css);
+
+body {
+   font-family: 'Noto Sans Kannada', sans-serif;
+}
+</style>
+</head>
+<body>
+  <nav class="navbar nabvar-default">
+      <div class="navbar-header">
+         <button type="button" class="navbar-toggle collapsed"
+            data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+            aria-expanded="false">
+            <span class="icon-bar"></span> 
+            <span class="icon-bar"></span> 
+            <span class="icon-bar"></span>
+         </button>
+         <a class="navbar-brand" href="mainPage.jsp">맛보오</a>
+      </div>
+      <div class="collapse navbar-collapse"
+         id="bs-example-navbar-collapse-1">
+         <ul class="nav navbar-nav">
+            <li><a href="mainPage.jsp">메인</a></li>
+            <li><a href="con?command=bbs">게시판</a></li>
+            <li><a href="con?command=chart">관리페이지</a></li>
+         </ul>
+         <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown"><a href="#" class="dropdown-toggle"
+               data-toggle="dropdown" role="button" aria-haspopup="true"
+               aria-expanded="false">접속하기<span class="caret"></span></a>
+               <ul class="dropdown-menu">
+                  <li><a href="login.jsp">로그인</a></li>
+                  <li class="active"><a href="signUp.html">회원가입</a></li>
+               </ul>
+            </li>
+         </ul>
+      </div>
+   </nav>
+      <div class="container">
+   <h1 align="center" style="font-size: 50px;">
+      <font color="#337ab7"><b>회원가입</b></font>
+   </h1>
+   <br><hr><br>
+   <form name="signFrom" action="con" method="post" onsubmit="return validate(1);">
+      <input type="hidden"  name = "command" value="signup">
+      <input type="hidden" id="checkID" value="false">
+      <table width="800" height="400" border="1" align="center"
+         cellspacing="0">
+         <tr height="10" align="center">
+            <td colspan="2" style="background: #337ab7;"><font color=white><b>회원정보</b></font></td>
+         </tr>
+         <tr>
+            <td style="text-align:center"><b>아이디</b></td>
+            <td><input type="text" style="width: 170px, text-align:center" id="userId" name="userId" maxlength="12" /> <input type="button" onclick="validate(2)"value="아이디중복검사"/>※4-12자의 영문 대소문자와 숫자로만 입력</td>
+         </tr>
+         <tr>
+            <td style="text-align:center"><b >비밀번호</b></td>
+            <td><input type="password"style="width: 170px, text-align:center"  id="userPass" name="userPass" maxlength="12" /> ※4-12자의 영문 대소문자와 숫자로만 입력</td>
+         </tr>
+         <tr>
+            <td style="text-align:center"><b>비밀번호확인</b></td>
+            <td><input type="password" style="width: 170px, text-align:justify" id="checkpw" maxlength="12"  /></td>
+         </tr>
+         <tr>
+            <td style="text-align:center"><b>이름</b></td>
+            <td><input type="text" style="width: 170px, text-align:center"  id="userName" name="userName"  maxlength="12" /></td>
+         </tr>
+         <tr>
+            <td style="text-align:center"><b>메일주소</b></td>
+            <td><input type="text" style="width: 170px, text-align:center" id="userEmail" name="userEmail"  /> ex) snk4567@naver.com</td>
+         </tr>
+      </table>
+      <center>
+         <br> <input type="submit" value="회원가입" />
+         <input type="reset" value="다시입력" />
+      </center>
+   </form>
+   </div>
+   <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+      <script src="bootstrap/js/bootstrap.js"></script>
+</body>
+</html>

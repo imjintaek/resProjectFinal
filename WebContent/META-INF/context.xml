@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+1. DB 접속의 설정 정보를 저장하게 되는 tomcat 서버의 설정 파일 
+2. 메뉴얼에 맞게 개발
+3. 접속하고자 하는 DB의 종류 및 설정 정보
+	- DB는 하나 이상일 수도 있음
+4. 다수의 DB 설정 정보일 경우 고려 사항
+	- 각 DB 설정의 구분이 필수
+	- 별칭(별명) 부여
+	
+-->
+<Context>
+	<Resource name="jdbc/myoracle" auth="Container"
+	              type="javax.sql.DataSource" driverClassName="oracle.jdbc.OracleDriver"
+	              url="jdbc:oracle:thin:@127.0.0.1:1521:orcl"
+	              username="restaurant" password="1234" maxTotal="20" maxIdle="10"
+	              maxWaitMillis="-1"/>
+</Context>
